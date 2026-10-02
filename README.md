@@ -19,5 +19,3 @@ The 120-minute limit is a fictional rule chosen for this project.
 
 ## Progress
 The project is currently in the planning stage.
-
-É simples, claro e coerente com o que já decidimos. O README pode crescer conforme o projeto avança, sem precisar explicar tudo agora.
