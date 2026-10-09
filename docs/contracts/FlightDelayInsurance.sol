@@ -18,4 +18,16 @@ contract FlightDelayInsurance {
         insurer = msg.sender;
         reporter = reporterAddress;
     }
+    event ContractFunded(address indexed sender, uint256 amount);
+
+    function fundContract() external payable {
+        require(msg.sender == insurer, "Only insurer can fund");
+        require(msg.value > 0, "Funding must be greater than zero");
+
+        emit ContractFunded(msg.sender, msg.value);
+    }
+
+    function getContractBalance() external view returns (uint256) {
+        return address(this).balance;
+    }
 }
