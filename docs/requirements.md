@@ -36,6 +36,8 @@
 - A customer cannot claim another customer's policy.
 - A second compensation payment fails.
 - A purchase fails if there are insufficient unreserved funds.
+- Reporting a flight result before departure fails.
+- Changing an already recorded flight result fails.
 
 ## Scope
 This is an academic prototype using simulated flight data and local test funds. 
