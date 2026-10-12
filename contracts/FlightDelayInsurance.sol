@@ -27,6 +27,12 @@ contract FlightDelayInsurance {
     mapping(bytes32 => Flight) public flights;
     mapping(uint256 => Policy) public policies;
     mapping(address => mapping(bytes32 => bool)) public hasPolicy;
+    mapping(bytes32 => uint256) public flightPolicyCount;
+
+    event DelayReported(
+        bytes32 indexed flightId,
+        uint256 delayMinutes
+    );
 
     event ContractFunded(
         address indexed sender,
@@ -112,11 +118,46 @@ contract FlightDelayInsurance {
 
         hasPolicy[msg.sender][flightId] = true;
         reservedFunds += COMPENSATION;
+        flightPolicyCount[flightId]++;
 
         emit PolicyPurchased(
             policyCount,
             msg.sender,
             flightId
         );
+    }
+        function reportDelay(
+        bytes32 flightId,
+        uint256 delayMinutes
+    ) external {
+        require(
+            msg.sender == reporter,
+            "Only reporter can report"
+        );
+
+        Flight storage flight = flights[flightId];
+
+        require(
+            flight.scheduledDeparture > 0,
+            "Flight not found"
+        );
+        require(
+            block.timestamp >= flight.scheduledDeparture,
+            "Flight has not departed"
+        );
+        require(
+            !flight.reported,
+            "Delay already reported"
+        );
+
+        flight.delayMinutes = delayMinutes;
+        flight.reported = true;
+
+        if (delayMinutes < DELAY_THRESHOLD) {
+            reservedFunds -=
+                flightPolicyCount[flightId] * COMPENSATION;
+        }
+
+        emit DelayReported(flightId, delayMinutes);
     }
 }
