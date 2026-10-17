@@ -45,6 +45,12 @@ contract FlightDelayInsurance {
         bytes32 indexed flightId
     );
 
+      event CompensationPaid(
+        uint256 indexed policyId,
+        address indexed customer,
+        uint256 amount
+    );
+
     constructor(address reporterAddress) {
         require(
             reporterAddress != address(0),
@@ -159,5 +165,48 @@ contract FlightDelayInsurance {
         }
 
         emit DelayReported(flightId, delayMinutes);
+    }
+     function claimCompensation(uint256 policyId) external {
+        require(
+            policyId > 0 && policyId <= policyCount,
+            "Policy not found"
+        );
+
+        Policy storage policy = policies[policyId];
+
+        require(
+            msg.sender == policy.customer,
+            "Only policy owner can claim"
+        );
+        require(
+            !policy.paid,
+            "Compensation already paid"
+        );
+
+        Flight storage flight = flights[policy.flightId];
+
+        require(
+            flight.reported,
+            "Delay not reported"
+        );
+        require(
+            flight.delayMinutes >= DELAY_THRESHOLD,
+            "Delay does not qualify"
+        );
+
+        policy.paid = true;
+        reservedFunds -= COMPENSATION;
+
+        (bool success, ) = payable(policy.customer).call{
+            value: COMPENSATION
+        }("");
+
+        require(success, "Compensation transfer failed");
+
+        emit CompensationPaid(
+            policyId,
+            policy.customer,
+            COMPENSATION
+        );
     }
 }
