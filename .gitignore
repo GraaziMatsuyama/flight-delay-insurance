@@ -188,3 +188,5 @@ __pycache__/
 build/deployment.json
 
 build/purchase.json
+
+~/.venv/bin/python scripts/report_delay.py
