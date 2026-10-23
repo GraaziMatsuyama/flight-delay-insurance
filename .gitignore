@@ -186,3 +186,5 @@ __pycache__/
 .DS_Store
 
 build/deployment.json
+
+build/purchase.json
