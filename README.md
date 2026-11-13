@@ -47,6 +47,7 @@ Flight information is simulated and all payments use test ETH. The insurance con
 - requirements.md: project requirements.
 - design.md: project design.
 - requirements.txt: Python dependencies.
+- [Project poster](docs/Flight_Delay_Insurance_Poster.pptx): final PowerPoint poster.
 
 ## Progress
 
@@ -116,3 +117,7 @@ PYTHON_BIN="$HOME/.venv/bin/python" bash scripts/run_demo.sh
 The startup command above does not persist blockchain state.
 After restarting Ganache, run the demonstration again to create
 and fund a new contract.
+
+### Link Video 
+
+https://drive.google.com/file/d/1PNo4ofuVGtQtoPGggiFUyE3rd4Y508Mr/view?usp=share_link
